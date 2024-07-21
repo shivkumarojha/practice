@@ -1,9 +1,21 @@
+import 'dotenv/config'
 import express from "express"
+
 const app = express()
+
+// parse json data
 app.use(express.json())
+
+// Parse form data
+app.use(express.urlencoded({ extended: true }))
+
 app.get("/api", (req, res) => {
+    const header1 = req.headers['user-agent']
     res.json({
-        message: "This is api endpoint"
+        message: "This is api endpoint",
+        header1: header1,
+        language: req.headers['accept-language'],
+        ip: req.ip
     })
 })
 app.get("/health", (req, res) => {
@@ -26,6 +38,9 @@ app.post("/submit-data", (req, res) => {
         allTextContent: textContent
     })
 })
-app.listen(3000, () => {
-    console.log("server is running at port ")
+
+// encode form data
+
+app.listen(process.env.PORT, () => {
+    console.log(`server is running at port ${process.env.PORT}`)
 })
